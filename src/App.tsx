@@ -9,6 +9,7 @@ import IndicatorWeather from './components/IndicatorWeather'
 import TableWeather from './components/TableWeather';
 import ControlWeather from './components/ControlWeather';
 import LineChartWeather from './components/LineChartWeather';
+import Item from './interface/Item';
 
 interface Indicator {
    title?: String;
@@ -21,6 +22,7 @@ function App() {
 
    {/* Variable de estado y función de actualización */ }
    let [indicators, setIndicators] = useState<Indicator[]>([])
+   let[items, setItems] = useState<Item[]>([])
 
    {/* Hook: useEffect */ }
    useEffect(() => {
@@ -61,6 +63,29 @@ function App() {
 
          {/* Modificación de la variable de estado mediante la función de actualización */ }
          setIndicators(dataToIndicators)
+
+         {/* Arreglo para agregar los resultados */ }
+         let dataToTable: Item[] = new Array<Item>();
+
+          {/* 
+              Análisis, extracción y almacenamiento del contenido del XML 
+              en el arreglo de resultados
+          */}
+          let timeNodes = xml.querySelectorAll('time')
+          Array.from(timeNodes).map((node) => {
+            let dateStart = node.getAttribute('from')?.split('T')[1]?.slice(0,5) || ""
+            let dateEnd = node.getAttribute('to')?.split('T')[1]?.slice(0,5) || ""
+            let precipitationNode = node.querySelector('precipitation')
+            let precipitation = precipitationNode?.getAttribute('value') || ""
+            let humidity = node.querySelector('humidity')?.getAttribute('value') || ''
+            let clouds = node.querySelector('clouds')?.getAttribute('value') || ''
+
+            dataToTable.push({dateStart, dateEnd, precipitation, humidity, clouds})
+          })
+
+          setItems(dataToTable)
+          
+
       }
 
       request();
@@ -105,7 +130,7 @@ function App() {
                   <ControlWeather />
                </Grid>
                <Grid size={{ xs: 12, sm: 9 }}>
-                  <TableWeather />
+                  <TableWeather itemsIn={items}/>
                </Grid>
             </Grid>
 

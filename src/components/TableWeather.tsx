@@ -5,6 +5,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Item from '../interface/Item';
+import { useEffect, useState } from 'react';
+
+interface MyProp {
+  itemsIn: Item[];
+}
 
 function createData(
   name: string,
@@ -24,7 +30,12 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-export default function BasicTable() {
+export default function BasicTable(props: MyProp) {
+  let [rows, setRows] = useState<Item[]>([])
+
+  useEffect(() => {
+    setRows(props.itemsIn)
+  }, [props])
   return (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
