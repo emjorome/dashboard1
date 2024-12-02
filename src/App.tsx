@@ -76,7 +76,7 @@ function App() {
             let dateStart = node.getAttribute('from')?.split('T')[1]?.slice(0,5) || ""
             let dateEnd = node.getAttribute('to')?.split('T')[1]?.slice(0,5) || ""
             let precipitationNode = node.querySelector('precipitation')
-            let precipitation = precipitationNode?.getAttribute('value') || ""
+            let precipitation = precipitationNode?.getAttribute('probability') || ""
             let humidity = node.querySelector('humidity')?.getAttribute('value') || ''
             let clouds = node.querySelector('clouds')?.getAttribute('value') || ''
 
